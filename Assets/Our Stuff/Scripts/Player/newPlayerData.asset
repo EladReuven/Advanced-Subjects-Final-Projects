@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014c692436b84e647a223ee297663ece, type: 3}
   m_Name: newPlayerData
   m_EditorClassIdentifier: 
-  playerName: poopoo
-  gold: 5
-  currentWeaponID: 1231
-  position: {x: 1231, y: 3123, z: 1244}
+  playerName: eLAD
+  gold: 0
+  currentWeaponID: 0
+  position: {x: 0, y: 0, z: 0}
