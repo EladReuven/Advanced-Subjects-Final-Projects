@@ -24,14 +24,15 @@ public class DataBaseManager : MonoBehaviour
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
-    [ContextMenu("Create user")]
-    void CreatUser()
+    [ContextMenu("Create/Update user")]
+    void CreateOrUpdateUser()
     {
         User newUser = new User(GameManager.Instance.player.playerData);
         string json = JsonUtility.ToJson(newUser);
 
         dbReference.Child("users").Child(userID).SetRawJsonValueAsync(json);
         print(json);
+        
     }
 
     public IEnumerator GetUser(Action<DataSnapshot> onCallback)
@@ -42,10 +43,13 @@ public class DataBaseManager : MonoBehaviour
 
         if(userData != null)
         {
-            print("gold to string " + userData.Result.Child("gold").Value.ToString());
             DataSnapshot snapshot = userData.Result;
 
             onCallback.Invoke(snapshot);
+        }
+        else
+        {
+            CreateOrUpdateUser();
         }
     }
 
