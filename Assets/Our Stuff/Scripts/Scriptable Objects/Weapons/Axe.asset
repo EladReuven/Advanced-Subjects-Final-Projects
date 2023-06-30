@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 731bf2c4bbeedac499973959f7d04fd9, type: 3}
+  m_Name: Axe
+  m_EditorClassIdentifier: 
+  Name: Axe
+  Lore: Chop chop chop
+  Animation: Axe
+  Damage: 75
+  AttackSpeed: 1.5
+  WeaponPrefab: {fileID: 6783953316381215632, guid: 4946718871b7b05419c7eeb6a7ca928d,
+    type: 3}

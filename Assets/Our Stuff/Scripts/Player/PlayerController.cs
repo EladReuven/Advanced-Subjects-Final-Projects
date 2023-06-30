@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     {
         // Teleport the player to the closest point on the NavMesh
         TeleportToClosestNavMeshPoint();
+        _agent.enabled = true;
     }
 
     private void Update()
