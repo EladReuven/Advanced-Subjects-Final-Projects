@@ -7,6 +7,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private Transform _weaponSocket;
     private float _attackSpeed;
     private float _attackDamage;
+    private string _attackAnimation;
+    private Animator _anim => GetComponentInChildren<Animator>();
 
     private bool _isAttacking = false;
     private Camera _camera => Camera.main;
@@ -35,6 +37,8 @@ public class PlayerCombat : MonoBehaviour
     {
         _isAttacking = true;
         _navMeshAgent.updateRotation = false;
+
+        _anim.SetTrigger(_attackAnimation);
 
         Quaternion startRotation = transform.rotation;
         Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
@@ -78,5 +82,6 @@ public class PlayerCombat : MonoBehaviour
         Instantiate(newWeapon.WeaponPrefab, _weaponSocket.transform);
         _attackDamage = newWeapon.Damage;
         _attackSpeed = newWeapon.AttackSpeed;
+        _attackAnimation = newWeapon.Animation;
     }
 }

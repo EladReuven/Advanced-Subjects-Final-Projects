@@ -19,7 +19,7 @@ public class PlayerPickup : MonoBehaviour
 
             if (_currentPickupToDrop != null)
             {
-                _currentPickupToDrop.transform.position = transform.position;
+                _currentPickupToDrop.transform.position = transform.position + Vector3.up;
                 _currentPickupToDrop.SetActive(true);
                 _currentDroppedPickup = _currentPickupToDrop;
             }

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Sword
   Lore: Very Sharp
+  Animation: Sword
   Damage: 50
-  AttackSpeed: 2
+  AttackSpeed: 1
   WeaponPrefab: {fileID: 6302465128816013348, guid: 3070f1abbad49e84d9ab6e449b7593b1,
     type: 3}
