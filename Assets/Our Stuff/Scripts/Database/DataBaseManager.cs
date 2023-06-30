@@ -43,23 +43,42 @@ public class DataBaseManager : MonoBehaviour
         string username = menuInstance.GetUsernameInputFieldText();
         string password = menuInstance.GetPasswordInputFieldText();
 
-        var userData = dbReference.Child("users").Child(username).GetValueAsync();
+        // add .Child(username).GetValueAsync();
+        var userData = dbReference.Child("users").GetValueAsync();
 
         yield return new WaitUntil(predicate: () => userData.IsCompleted);
 
-        if (userData.Result.Child(username).Value.ToString() != null)
+        //if snapshot could not be reached
+        if (userData.Exception != null)
+        {
+            menuInstance.SetErrorText("Error getting user data: " + userData.Exception);
+            yield break;
+        }
+
+        print(userData.Result.HasChild(username));
+
+        if (userData.Result.HasChild(username))
         {
             menuInstance.SetErrorText("User Already Exists");
         }
         else
         {
-            menuInstance.SetErrorText("User Created");
+            menuInstance.SetErrorText("Creating user " + username);
 
-            User newUser = new User(password, GameManager.Instance.player.playerData);
-            string json = JsonUtility.ToJson(newUser);
-
-            dbReference.Child("users").Child(username).SetRawJsonValueAsync(json);
+            CreateUser();
+            
         }
+    }
+
+    [ContextMenu("Create user")]
+    void CreatUser()
+    {
+        User newUser = new User(menuInstance.GetPasswordInputFieldText(), GameManager.Instance.player.playerData);
+        string json = JsonUtility.ToJson(newUser);
+
+        string username = menuInstance.GetUsernameInputFieldText();
+        dbReference.Child("users").Child(username).SetRawJsonValueAsync(json);
+        print(json);
     }
 
     public IEnumerator GetUser(Action<DataSnapshot> onCallback)
@@ -71,24 +90,21 @@ public class DataBaseManager : MonoBehaviour
 
         yield return new WaitUntil(predicate: () => userData.IsCompleted);
 
-        print(userData.Result.Child(username).Value);
-
         if(userData != null)
         {
             DataSnapshot snapshot = userData.Result;
 
             //check if userdata password == menu password
-            //string userDataPassword = snapshot.Child(USERID_PASSWORD_CONST).Value.ToString();
-            //print(userDataPassword);
-            //if(userDataPassword.Equals(password))
-            //{
-            //    onCallback.Invoke(snapshot);
-            //}
-            //else
-            //{
-            //    //if not then error message password is wrong
-            //    menuInstance.SetErrorText("Wrong Password");
-            //}
+            string userDataPassword = snapshot.Child(USERID_PASSWORD_CONST).Key?.ToString();
+            if (userDataPassword.Equals(password))
+            {
+                onCallback.Invoke(snapshot);
+            }
+            else
+            {
+                //if not then error message password is wrong
+                menuInstance.SetErrorText("Wrong Password");
+            }
         }
         else
         {
