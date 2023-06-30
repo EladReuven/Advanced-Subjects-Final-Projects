@@ -27,4 +27,14 @@ public class User
         this.y = playerData.position.y;
         this.z = playerData.position.z;
     }
+
+    public User(string playerName, int gold, int currentWeaponID, float x, float y, float z)
+    {
+        this.name = playerName;
+        this.gold = gold;
+        this.currentWeaponID = currentWeaponID;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 }

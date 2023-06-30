@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class DataBaseManager : MonoBehaviour
 {
@@ -14,14 +15,19 @@ public class DataBaseManager : MonoBehaviour
     public const string USERID_Y_CONST = "y";
     public const string USERID_Z_CONST = "z";
 
-    string userID;
+    string usernameData;
     DatabaseReference dbReference;
 
 
     private void Start()
     {
-        userID = SystemInfo.deviceUniqueIdentifier;
+        usernameData = SystemInfo.deviceUniqueIdentifier;
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+    }
+
+    public void SetUsername(string username)
+    {
+        usernameData = username;
     }
 
     [ContextMenu("Create user")]
@@ -30,19 +36,18 @@ public class DataBaseManager : MonoBehaviour
         User newUser = new User(GameManager.Instance.player.playerData);
         string json = JsonUtility.ToJson(newUser);
 
-        dbReference.Child("users").Child(userID).SetRawJsonValueAsync(json);
+        dbReference.Child("users").Child(usernameData).SetRawJsonValueAsync(json);
         print(json);
     }
 
     public IEnumerator GetUser(Action<DataSnapshot> onCallback)
     {
-        var userData = dbReference.Child("users").Child(userID).GetValueAsync();
+        var userData = dbReference.Child("users").Child(usernameData).GetValueAsync();
 
         yield return new WaitUntil(predicate: () => userData.IsCompleted);
 
         if(userData != null)
         {
-            print("gold to string " + userData.Result.Child("gold").Value.ToString());
             DataSnapshot snapshot = userData.Result;
 
             onCallback.Invoke(snapshot);
@@ -53,6 +58,34 @@ public class DataBaseManager : MonoBehaviour
     public void GetUserInfo()
     {
         StartCoroutine(GetUser(SetUser));
+    }
+
+
+    IEnumerator CheckUserExistsEnumerator()
+    {
+        var userData = dbReference.Child("users").Child(usernameData).GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => userData.IsCompleted);
+
+        if (userData != null)
+        {
+            DataSnapshot snapshot = userData.Result;
+
+            string? snapshotKey = snapshot.Key.ToString();
+            //string? usernameDataValue = snapshot.Child(usernameData).Value?.ToString();
+
+            print("snapshot Key: " + snapshotKey);
+            //print("usernamedata value: " + usernameDataValue);
+        }
+        else
+        {
+            print("user does not exist");
+        }
+    }
+
+    public void CheckUserExists()
+    {
+        StartCoroutine(CheckUserExistsEnumerator());
     }
 
     void SetUser(DataSnapshot userData)

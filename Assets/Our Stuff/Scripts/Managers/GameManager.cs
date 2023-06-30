@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public Player player;
+    public DataBaseManager dataBaseManager;
 
     public static GameManager Instance;
 
@@ -12,4 +13,7 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
     }
+
+
+
 }
