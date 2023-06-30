@@ -5,14 +5,14 @@ using UnityEngine;
 public class User
 {
     //private string username;
-    private string password;
+    [SerializeField] private string password;
 
-    private string name;
-    private int gold;
-    private int currentWeaponID;
-    private float x;
-    private float y;
-    private float z;
+    [SerializeField] private string name;
+    [SerializeField] private int gold;
+    [SerializeField] private int currentWeaponID;
+    [SerializeField] private float x;
+    [SerializeField] private float y;
+    [SerializeField] private float z;
 
     //public string Username { get => username;}
     public string Name { get => name;}

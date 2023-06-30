@@ -65,13 +65,13 @@ public class DataBaseManager : MonoBehaviour
         {
             menuInstance.SetErrorText("Creating user " + username);
 
-            CreateUser();
+            UploadUserToDatabase();
             
         }
     }
 
-    [ContextMenu("Create user")]
-    void CreatUser()
+    [ContextMenu("Create user in database")]
+    void UploadUserToDatabase()
     {
         User newUser = new User(menuInstance.GetPasswordInputFieldText(), GameManager.Instance.player.playerData);
         string json = JsonUtility.ToJson(newUser);
@@ -86,16 +86,24 @@ public class DataBaseManager : MonoBehaviour
         string username = menuInstance.GetUsernameInputFieldText();
         string password = menuInstance.GetPasswordInputFieldText();
 
-        var userData = dbReference.Child("users").Child(username).GetValueAsync();
+        var userData = dbReference.Child("users").GetValueAsync();
 
         yield return new WaitUntil(predicate: () => userData.IsCompleted);
 
-        if(userData != null)
+        if (userData.Exception != null)
         {
-            DataSnapshot snapshot = userData.Result;
+            menuInstance.SetErrorText("Error getting user data: " + userData.Exception);
+            yield break;
+        }
+
+        
+
+        if(userData.Result.HasChild(username))
+        {
+            DataSnapshot snapshot = userData.Result.Child(username);
 
             //check if userdata password == menu password
-            string userDataPassword = snapshot.Child(USERID_PASSWORD_CONST).Key?.ToString();
+            string userDataPassword = snapshot.Child(USERID_PASSWORD_CONST).Value?.ToString();
             if (userDataPassword.Equals(password))
             {
                 onCallback.Invoke(snapshot);
