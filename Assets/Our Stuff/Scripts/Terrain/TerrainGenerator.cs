@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.AI;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
@@ -93,6 +94,7 @@ public class TerrainGenerator : MonoBehaviour
 
         // Assign the generated heights to the terrain
         _terrain.terrainData.SetHeights(0, 0, heights);
+        NavMeshBuilder.BuildNavMesh();
     }
 }
 
